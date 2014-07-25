@@ -89,7 +89,19 @@ Run TEXPRESS functions on the MATLAB command line:
 >> obj = SpectraPreprocessing();
 
 % Y = chromatographic signal, Smoothness = 10^3-10^8, Asymmetry = 0.1-0.0001
->> LCMSData = obj.BaselineCorrection(Y, Smoothness, Asymmetry);
+>> LCMSData = obj.BaselineCorrection(y, smoothness, asymmetry);
+````
+
+#### Peak Area
+
+* Determine the area of a peak using the exponential modified gaussian model (EMG).
+
+````matlab
+% Initialize the PeakArea class
+>> obj = PeakArea();
+
+% Find peak area of a known peak
+>> PeakData = obj.CalculateArea(xData, yData, retentionTime, 'EMG');
 ````
 
 ## Notes
