@@ -8,6 +8,8 @@ TEXPRESS is an open-source MATLAB toolbox for processing GDGT LC/MS data.
 
 ## Features
 
+Check out the [TEXPRESS v1.0 wiki](https://github.com/GDGTs/TEXPRESS/wiki) for screenshots of the graphical user interface.
+
 #### Supported File Types
 * '.CDF' [[Agilent]](https://github.com/GDGTs/TEXPRESS#agilent-chemstation-macro)
 
