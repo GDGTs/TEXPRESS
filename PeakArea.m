@@ -76,11 +76,31 @@ classdef PeakArea
                 % Calculate peak width
                 obj = PeakWidth(obj);
 
+                % Determine fit start
+                if obj.peakTime - 3 * obj.peakWidth < obj.xData(1)
+                    % Fit start is first x value
+                    Start = obj.xData(1);
+                else
+                    % Fit start is three times peak width
+                    Start = obj.peakTime - 3 * obj.peakWidth;
+                end
+                
+                % Determine fit end
+                if obj.peakTime + 3 * obj.peakWidth > obj.xData(end)
+                    % Fit start is first x value
+                    End = obj.xData(end);
+                else
+                    % Fit end is three times peak width
+                    End = obj.peakTime + 3 * obj.peakWidth;
+                end
+                
                 % Find x index start/end
                 obj.fitStart = find(...
-                    obj.xData >= obj.peakTime - 3 * obj.peakWidth, 1);                
+                    obj.xData >= Start, 1);                
                 obj.fitEnd = find(...
-                    obj.xData >= obj.peakTime + 3 * obj.peakWidth, 1);
+                    obj.xData >= End, 1);
+                
+                clear Start End
 
                 % Pre-allocate space for peak fit
                 obj.fitX = linspace(...
@@ -203,18 +223,9 @@ classdef PeakArea
             % Get distance from center to left/right side of peak
             rightDistance = obj.xData(rightIndex) - obj.xData(peakIndex);
             leftDistance = obj.xData(peakIndex) - obj.xData(leftIndex);
-        
-            % Calculate peak asymmetry at half height
-            peakAsymmetry = rightDistance / leftDistance;
-        
-            % If asymmetry is within a valid range
-            if peakAsymmetry < 2 && peakAsymmetry > 0.5
-            
-                % Calculate peak width
-                obj.peakWidth = rightDistance + leftDistance;
-            
+
             % If asymmetry is invalid due to left side
-            elseif leftDistance * 2 > rightDistance
+            if leftDistance * 2 > rightDistance
             
                 % Assume left distance is invalid
                 obj.peakWidth = rightDistance * 2;
@@ -224,10 +235,12 @@ classdef PeakArea
             
                 % Assume right distance is invalid
                 obj.peakWidth = leftDistance * 2;
+            else
+                % Calculate peak width
+                obj.peakWidth = rightDistance + leftDistance;
             end
         
             clear peakIndex 
-            clear peakAsymmetry 
             clear halfHeight
             clear rightIndex leftIndex
             clear rightDistance leftDistance
